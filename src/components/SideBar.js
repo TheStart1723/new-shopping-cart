@@ -10,7 +10,7 @@ import {
     Box
 } from 'rbx';
 
-const SideBar = ({ openSidebar, setOpenSidebar, cart, state}) => {
+const SideBar = ({ openSidebar, setOpenSidebar, cart, state, updateDatabase}) => {
     const { totalCost, totalCount } = cart.reduce(
         (acc, curr) => {
             return {
@@ -44,7 +44,8 @@ const SideBar = ({ openSidebar, setOpenSidebar, cart, state}) => {
                                     backgroundColor={"white"}
                                     textColor={"black"}
                                     fullwidth
-                                    size={"medium"}>
+                                    size={"medium"}
+                                    onClick={() => updateDatabase(cart)}>
                                     Checkout
                                 </Button>
                             </Container>

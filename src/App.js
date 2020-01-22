@@ -32,6 +32,20 @@ const uiConfig = {
   }
 }
 
+const updateDataBase = (cart) => {
+  return (
+    cart.map(cartItem => {
+      const ref = firebase.database().ref(cartItem.sku + '/')
+      ref.once("value", (snapshot) => {
+        let stock = snapshot.val()[cartItem.size] - 1
+        ref.update({
+          [cartItem.size]: stock
+        })
+      })
+    })
+  )
+}
+
 const App = () => {
   const [data, setData] = useState({})
   const [openSidebar, setOpenSidebar] = useState(false)
@@ -122,9 +136,10 @@ const App = () => {
 
   return (
     <React.Fragment>
-      <NavigationBar openSidebar={openSidebar} setOpenSidebar={setOpenSidebar} user={user} uiConfig={uiConfig}/>
+      <NavigationBar openSidebar={openSidebar} setOpenSidebar={setOpenSidebar} user={user} uiConfig={uiConfig} />
       <Container fluid style={{ margin: 0, marginTop: "-20px" }}>
         <SideBar openSidebar={openSidebar} setOpenSidebar={setOpenSidebar} cart={cart} setCart={setCart}
+          updateDatabase={updateDataBase}
           state={{
             incrementCart,
             decrementCart,

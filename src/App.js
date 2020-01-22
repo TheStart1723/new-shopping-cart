@@ -7,6 +7,8 @@ import NavigationBar from "./components/NavigationBar";
 import { Column, Container } from 'rbx';
 import firebase from "firebase/app";
 import "firebase/database";
+import "firebase/auth";
+
 
 const firebaseConfig = {
   apiKey: "AIzaSyB5kvJJhTbgCJsj9Oy0RwGUFiSf0dyME8I",
@@ -17,17 +19,30 @@ const firebaseConfig = {
   messagingSenderId: "988261010713",
   appId: "1:988261010713:web:587924bd623856fdf8c988",
   measurementId: "G-6S5DZRL31K"
-};
+}
 
-firebase.initializeApp(firebaseConfig);
-const db = firebase.database().ref();
+firebase.initializeApp(firebaseConfig)
+const db = firebase.database().ref()
+
+const uiConfig = {
+  signInFlow: "popup",
+  signInOptions: [firebase.auth.GoogleAuthProvider.PROVIDER_ID],
+  callbacks: {
+    signInSuccessWithAuthResult: () => false
+  }
+}
 
 const App = () => {
-  const [data, setData] = useState({});
-  const [openSidebar, setOpenSidebar] = useState(false);
-  const products = Object.values(data);
-  const [cart, setCart] = useState([]);
-  const [inventory, setInventory] = useState({});
+  const [data, setData] = useState({})
+  const [openSidebar, setOpenSidebar] = useState(false)
+  const products = Object.values(data)
+  const [cart, setCart] = useState([])
+  const [inventory, setInventory] = useState({})
+  const [user, setUser] = useState(undefined)
+
+  useEffect(() => {
+    firebase.auth().onAuthStateChanged(setUser);
+  }, []);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -107,7 +122,7 @@ const App = () => {
 
   return (
     <React.Fragment>
-      <NavigationBar openSidebar={openSidebar} setOpenSidebar={setOpenSidebar} />
+      <NavigationBar openSidebar={openSidebar} setOpenSidebar={setOpenSidebar} user={user} uiConfig={uiConfig}/>
       <Container fluid style={{ margin: 0, marginTop: "-20px" }}>
         <SideBar openSidebar={openSidebar} setOpenSidebar={setOpenSidebar} cart={cart} setCart={setCart}
           state={{

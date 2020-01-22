@@ -37,20 +37,59 @@ const App = () => {
     }
 
     setOpenSidebar(true);
-  };
+  }
+
+  const incrementCart = item => {
+    let newCart = [...cart];
+    for (let i = 0; i < newCart.length; i++) {
+      if (newCart[i].sku === item.sku && newCart[i].size === item.size) {
+        newCart[i].count += 1;
+      }
+    }
+    setCart(newCart);
+  }
+
+  const decrementCart = item => {
+    let newCart = [...cart];
+    for (let i = 0; i < newCart.length; i++) {
+      if (newCart[i].sku === item.sku && newCart[i].size === item.size) {
+        if (newCart[i].count > 1) {
+          newCart[i].count -= 1;
+        } else {
+          newCart.splice(i, 1);
+        }
+      }
+    }
+    setCart(newCart);
+  }
+
+  const removeCart = item => {
+    let newCart = [...cart];
+    for (let i = 0; i < newCart.length; i++) {
+      if (newCart[i].sku === item.sku && newCart[i].size === item.size) {
+        newCart.splice(i, 1);
+      }
+    }
+    setCart(newCart);
+  }
 
   return (
     <React.Fragment>
-      <NavigationBar setOpenSidebar={setOpenSidebar} />
+      <NavigationBar openSidebar={openSidebar} setOpenSidebar={setOpenSidebar} />
       <Container fluid style={{ margin: 0, marginTop: "-20px" }}>
-        <SideBar openSidebar={openSidebar} setOpenSidebar={setOpenSidebar} cart={cart} />
+        <SideBar openSidebar={openSidebar} setOpenSidebar={setOpenSidebar} cart={cart} setCart={setCart}
+          state={{
+            incrementCart,
+            decrementCart,
+            removeCart
+          }} />
         <Container style={{ marginTop: "20px" }}>
           {[...Array(Math.ceil(products.length / 4)).keys()]
             .map(i => (products.slice(4 * i, 4 * i + 4)))
             .map((products, idx) => (
               <Column.Group key={idx}>
                 {products.map(product => (
-                  <Cards product={product} addCart={addCart} cart={cart} setCart={setCart} setOpenSidebar={setOpenSidebar} />
+                  <Cards product={product} addCart={addCart} cart={cart} setOpenSidebar={setOpenSidebar} />
                 ))}
               </Column.Group>
             ))

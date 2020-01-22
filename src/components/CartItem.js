@@ -12,7 +12,7 @@ import {
     Level
 } from "rbx";
 
-const CartItem = ({ item }) => {
+const CartItem = ({item, state}) => {
     return (
         <Card paddingless style={{ margin: "20px 0" }}>
             <Card.Content>
@@ -39,13 +39,13 @@ const CartItem = ({ item }) => {
 
                     <Media.Item align="right">
                         <div style={{ float: "right" }}>
-                            <Delete />
+                            <Delete onClick={() => state.removeCart(item)}/>
                         </div>
                         <br />
                         <div
                             style={{
                                 margin: "16%",
-                                color: "green"
+                                color: "red"
                             }}
                         >
                             <p>{`$${parseFloat(item.price).toFixed(2)}`}</p>
@@ -54,10 +54,10 @@ const CartItem = ({ item }) => {
                             <Level.Item align="left">
                                 <Level.Item as="a">
                                     <Button.Group hasAddons align="right">
-                                        <Button>
+                                        <Button onClick={() => state.incrementCart(item)}>
                                             <Icon size="small">+</Icon>
                                         </Button>
-                                        <Button>
+                                        <Button onClick={() => state.decrementCart(item)}>
                                             <Icon size="small">-</Icon>
                                         </Button>
                                     </Button.Group>

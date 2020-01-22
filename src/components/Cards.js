@@ -13,7 +13,7 @@ import {
 
 const sizes = ['S', 'M', 'L', 'XL']
 
-const Cards = ({product, addCart}) => {
+const Cards = ({product, cart, addCart}) => {
   const [sizeSelected, setSizeSelected] = useState(sizes[0])
   const cartItem = {
     sku: product.sku,

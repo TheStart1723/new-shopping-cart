@@ -5,6 +5,22 @@ import Cards from "./components/Cards";
 import SideBar from "./components/SideBar";
 import NavigationBar from "./components/NavigationBar";
 import { Column, Container } from 'rbx';
+import firebase from "firebase/app";
+import "firebase/database";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyB5kvJJhTbgCJsj9Oy0RwGUFiSf0dyME8I",
+  authDomain: "new-shopping-cart-f3698.firebaseapp.com",
+  databaseURL: "https://new-shopping-cart-f3698.firebaseio.com",
+  projectId: "new-shopping-cart-f3698",
+  storageBucket: "new-shopping-cart-f3698.appspot.com",
+  messagingSenderId: "988261010713",
+  appId: "1:988261010713:web:587924bd623856fdf8c988",
+  measurementId: "G-6S5DZRL31K"
+};
+
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database().ref();
 
 const App = () => {
   const [data, setData] = useState({});
@@ -23,12 +39,15 @@ const App = () => {
   }, []);
 
   useEffect(() => {
-    const fetchInventory = async () => {
-      const response = await fetch("./data/inventory.json");
-      const json = await response.json();
-      setInventory(json);
-    };
-    fetchInventory();
+    const handleData = snap => {
+      if (snap.val()) {
+        setInventory(snap.val());
+      }
+    }
+    db.on("value", handleData, error => alert(error));
+    return () => {
+      db.off("value", handleData);
+    }
   }, []);
 
   const addCart = item => {

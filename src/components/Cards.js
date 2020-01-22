@@ -57,7 +57,7 @@ const Cards = ({ product, addCart, inStock }) => {
             <Divider />
             {`$${parseFloat(product.price).toFixed(2)}`}
             <Button.Group style={{ justifyContent: "center", marginTop: "10px" }}>
-              <Button color="black" onClick={() => addCart(cartItem)} disabled={!sizes.some(size => inStock[size] > 0)}>Add to cart</Button>
+              <Button color="black" fullwidth onClick={() => addCart(cartItem)} disabled={!sizes.some(size => inStock[size] > 0)}>{!sizes.some(size => inStock[size] > 0) ? "Sold Out" : "Add to cart" }</Button>
             </Button.Group>
           </Content>
         </Card.Content>

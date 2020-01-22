@@ -29,17 +29,16 @@ const SideBar = ({ openSidebar, setOpenSidebar, cart, state, updateDatabase}) =>
                         <Hero.Body>
                             <Container>
                                 <Title align="center" style={{ color: "white" }}>Cart</Title>
-                                <Box color="primary" textAlign="centered">
-                                    <h2>Total Cost: ${totalCost.toFixed(2)}</h2>
-                                    <br />
-                                    <h2>Items : {totalCount}</h2>
-                                </Box>
                                 <div style={{ margin: "10px 0" }}>
                                     {cart.map(cartItem => (
                                         <CartItem key={`${cartItem.sku} | ${cartItem.size}`} item={cartItem}
                                             state={state} />
                                     ))}
                                 </div>
+                                <Box color="primary" textAlign={"centered"}>
+                                    <h2>Total Cost: <medium style={{ color: "green" }}>${totalCost.toFixed(2)}</medium></h2>
+                                    <h2>Items: <medium style={{ color: "green" }}>{totalCount}</medium></h2>
+                                </Box>
                                 <Button
                                     backgroundColor={"white"}
                                     textColor={"black"}

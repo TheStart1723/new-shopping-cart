@@ -45,7 +45,7 @@ const CartItem = ({item, state}) => {
                         <div
                             style={{
                                 margin: "16%",
-                                color: "red"
+                                color: "green"
                             }}
                         >
                             <p>{`$${parseFloat(item.price).toFixed(2)}`}</p>
@@ -66,7 +66,7 @@ const CartItem = ({item, state}) => {
                         </Level>
                         <Content>
                             <p>
-                                <small>Quantity: {item.count}</small>
+                                <small>Quantity: <medium style={{ color: "green" }}>{item.count}</medium></small>
                                 <br />
                             </p>
                         </Content>

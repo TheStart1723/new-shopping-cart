@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import 'rbx/index.css';
 import {
   Card,
@@ -10,11 +10,18 @@ import {
   Button,
 } from 'rbx';
 
+const Cards = ({ product, addCart, inStock }) => {
+  let sizes = ["S", "M", "L", "XL"];
+  if (inStock === undefined) {
+    inStock = {
+      S: 0,
+      M: 0,
+      L: 0,
+      XL: 0
+    }
+  }
+  const [sizeSelected, setSizeSelected] = useState()
 
-const sizes = ['S', 'M', 'L', 'XL']
-
-const Cards = ({product, cart, addCart}) => {
-  const [sizeSelected, setSizeSelected] = useState(sizes[0])
   const cartItem = {
     sku: product.sku,
     size: sizeSelected,
@@ -40,6 +47,7 @@ const Cards = ({product, cart, addCart}) => {
               {sizes.map(size => (
                 <Button
                   color={size === sizeSelected ? "black" : null}
+                  disabled={inStock[size] === 0}
                   onClick={() => setSizeSelected(size)}
                   key={size}>
                   {size}
@@ -49,7 +57,7 @@ const Cards = ({product, cart, addCart}) => {
             <Divider />
             {`$${parseFloat(product.price).toFixed(2)}`}
             <Button.Group style={{ justifyContent: "center", marginTop: "10px" }}>
-              <Button color="black" onClick={() => addCart(cartItem)}>Add to cart</Button>
+              <Button color="black" onClick={() => addCart(cartItem)} disabled={!sizes.some(size => inStock[size] > 0)}>Add to cart</Button>
             </Button.Group>
           </Content>
         </Card.Content>

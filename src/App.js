@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import 'rbx/index.css';
+import "./App.css";
 import Cards from "./components/Cards";
 import SideBar from "./components/SideBar";
 import NavigationBar from "./components/NavigationBar";
@@ -10,6 +11,7 @@ const App = () => {
   const [openSidebar, setOpenSidebar] = useState(false);
   const products = Object.values(data);
   const [cart, setCart] = useState([]);
+  const [inventory, setInventory] = useState({});
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -20,10 +22,22 @@ const App = () => {
     fetchProducts();
   }, []);
 
+  useEffect(() => {
+    const fetchInventory = async () => {
+      const response = await fetch("./data/inventory.json");
+      const json = await response.json();
+      setInventory(json);
+    };
+    fetchInventory();
+  }, []);
+
   const addCart = item => {
+    if (item.size === undefined) {
+      return;
+    }
     const itemExists = cart.some(
       x => x.sku === item.sku && x.size === item.size
-    );
+    )
     if (itemExists) {
       let newCart = [...cart];
       for (let i = 0; i < newCart.length; i++) {
@@ -35,7 +49,6 @@ const App = () => {
     } else {
       setCart([...cart, item]);
     }
-
     setOpenSidebar(true);
   }
 
@@ -89,7 +102,7 @@ const App = () => {
             .map((products, idx) => (
               <Column.Group key={idx}>
                 {products.map(product => (
-                  <Cards product={product} addCart={addCart} cart={cart} setOpenSidebar={setOpenSidebar} />
+                  <Cards product={product} inStock={inventory[product.sku]} addCart={addCart} cart={cart} setOpenSidebar={setOpenSidebar} />
                 ))}
               </Column.Group>
             ))
